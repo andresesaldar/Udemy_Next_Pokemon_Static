@@ -38,8 +38,8 @@ const Navbar: FC = () => (
 			</UINavbar.Brand>
 		</Link>
 		<UINavbar.Content enableCursorHighlight variant="underline">
-			<NavbarItem route="/" text="Home" />
-			<NavbarItem route="/favorites" text="Favorites" />
+			<NavbarItem route="/" text="Home" key="1" />
+			<NavbarItem route="/favorites" text="Favorites" key="2" />
 		</UINavbar.Content>
 	</UINavbar>
 );

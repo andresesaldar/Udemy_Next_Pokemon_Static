@@ -5,6 +5,7 @@ const client = axios.create({
 	baseURL: "https://pokeapi.co/api/v2",
 });
 
+export const initialPokemon = 151;
 export const maxPokemon = 649;
 
 type GetPokemonResponse = {
