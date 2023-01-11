@@ -1,7 +1,6 @@
 import {
 	Badge,
 	Button,
-	Col,
 	Grid,
 	Image,
 	Row,
@@ -154,51 +153,67 @@ const PokemonDetail: FC<PokemonDetailProps> = ({
 	useEffect(() => setFavorite(isFavorite(id)), [id]);
 	return (
 		<Grid.Container gap={2}>
-			<Grid xs={4} md={3} css={{ flexDirection: "column" }}>
-				<PokemonImages sprites={sprites} name={name} />
+			<Grid xs={12} sm={4} md={3}>
+				<Row css={{ "@sm": { flexDirection: "column" } }}>
+					<PokemonImages sprites={sprites} name={name} />
+				</Row>
 			</Grid>
-			<Grid xs={8} md={9} css={{ flexDirection: "column" }}>
-				<Row align="center" justify="space-between">
-					<Col css={{ marginBottom: "$8" }}>
-						<Row align="center">
-							<Text
-								h2
-								transform="capitalize"
-								css={{ marginBottom: "$0" }}
-							>
-								{name}
-							</Text>
+			<Grid xs={12} sm={8} md={9} css={{ flexDirection: "column" }}>
+				<Grid.Container>
+					<Grid xs={12} sm={6} css={{ flexDirection: "column" }}>
+						<Text
+							h2
+							transform="capitalize"
+							css={{ marginBottom: "$0" }}
+						>
+							{name}
 							<Text
 								b
-								css={{ color: "$accents7", marginLeft: "$5" }}
+								css={{
+									color: "$accents7",
+									marginLeft: "$5",
+								}}
 							>
 								#{id}
 							</Text>
+						</Text>
+						<Row>
+							{types.map(({ type }, index) => (
+								<Badge
+									color="primary"
+									key={index}
+									variant="flat"
+									isSquared
+									size="sm"
+									css={{
+										textTransform: "capitalize",
+									}}
+								>
+									{type.name}
+								</Badge>
+							))}
 						</Row>
-						{types.map(({ type }, index) => (
-							<Badge
-								color="primary"
-								key={index}
-								variant="flat"
-								isSquared
+						<Spacer y={0.5} />
+					</Grid>
+					<Grid xs={12} sm={6}>
+						<Row
+							css={{
+								"@sm": { justifyContent: "flex-end" },
+								alignItems: "center",
+							}}
+						>
+							<Button
 								size="sm"
-								css={{
-									textTransform: "capitalize",
-								}}
+								color="gradient"
+								bordered={!favorite}
+								onPress={onToggleFavorite}
 							>
-								{type.name}
-							</Badge>
-						))}
-					</Col>
-					<Button
-						size="sm"
-						color="gradient"
-						bordered={!favorite}
-						onPress={onToggleFavorite}
-					>
-						{favorite ? "Favorite" : "Save as Favorite"}
-					</Button>
-				</Row>
+								{favorite ? "Favorite" : "Save as Favorite"}
+							</Button>
+						</Row>
+					</Grid>
+				</Grid.Container>
+				<Spacer y={0.5} />
 				<Text span>
 					<Text b>Height: </Text>
 					{height}

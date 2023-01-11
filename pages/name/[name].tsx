@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import {
 	getPokemon,
 	getPokemonByIdOrName,
-	maxPokemon,
+	initialPokemon,
 } from "../../integration/pokemon";
 import MainLayout from "../../layouts/MainLayout";
 import { NextPageWithLayout } from "../_app";
@@ -36,9 +36,9 @@ PokemonDetail.getLayout = (page, { pokemon: { name, id } }): ReactElement => {
 };
 
 export const getStaticPaths: GetStaticPaths<PokemonDetailPaths> = async () => {
-	const pokemonList = await getPokemon({ limit: maxPokemon });
+	const pokemonList = await getPokemon({ limit: initialPokemon });
 	return {
-		fallback: false,
+		fallback: "blocking",
 		paths: pokemonList
 			.map(({ name }) => ({
 				params: { name: name || "" },
@@ -52,12 +52,19 @@ export const getStaticProps: GetStaticProps<
 	PokemonDetailPaths
 > = async (ctx) => {
 	const name = ctx.params?.name || "";
-	const pokemon = await getPokemonByIdOrName(name);
-	return {
-		props: {
-			pokemon,
-		},
-	};
+	try {
+		const pokemon = await getPokemonByIdOrName(name);
+		return {
+			props: {
+				pokemon,
+			},
+			revalidate: 86400,
+		};
+	} catch (e) {
+		return {
+			notFound: true,
+		};
+	}
 };
 
 export default PokemonDetail;

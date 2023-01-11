@@ -10,7 +10,7 @@ type PokemonGridProps = {
 const PokemonGrid: FC<PokemonGridProps> = ({ pokemonList }) => (
 	<Grid.Container gap={1} justify="flex-start">
 		{pokemonList.map((pokemon) => (
-			<Grid xs={4} lg={3} key={pokemon.id}>
+			<Grid sm={4} xs={6} lg={3} key={pokemon.id}>
 				<PokemonCard pokemon={pokemon} />
 			</Grid>
 		))}
