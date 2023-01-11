@@ -20,14 +20,14 @@ const NavbarItem: FC<NavbarItemProps> = ({ route, text }) => {
 
 const Navbar: FC = () => (
 	<UINavbar isBordered variant="sticky" color="">
-		<UINavbar.Brand>
-			<Image
-				src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"
-				alt="App Brand"
-				width={70}
-				height={70}
-			/>
-			<Link href="/">
+		<Link href="/">
+			<UINavbar.Brand>
+				<Image
+					src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"
+					alt="App Brand"
+					width={70}
+					height={70}
+				/>
 				<Text
 					h3
 					color="inherit"
@@ -35,8 +35,8 @@ const Navbar: FC = () => (
 				>
 					Pokémon
 				</Text>
-			</Link>
-		</UINavbar.Brand>
+			</UINavbar.Brand>
+		</Link>
 		<UINavbar.Content enableCursorHighlight variant="underline">
 			<NavbarItem route="/" text="Home" />
 			<NavbarItem route="/favorites" text="Favorites" />

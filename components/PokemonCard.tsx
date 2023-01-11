@@ -12,7 +12,7 @@ const PokemonCard: FC<PokemonCardProps> = ({
 }) => {
 	const router = useRouter();
 	const goToPokemonDetail = (): Promise<boolean> =>
-		router.push(`/pokemon/${id}`);
+		router.push(`/name/${name}`);
 	return (
 		<Card
 			isPressable

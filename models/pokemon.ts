@@ -8,6 +8,18 @@ export type Pokemon = {
 export type PokemonDetail = {
 	abilities: Ability[];
 	base_experience: number;
+	height: number;
+	id: number;
+	name: string;
+	sprites: Sprites;
+	stats: Stat[];
+	types: Type[];
+	weight: number;
+};
+
+export type FullPokemonDetail = {
+	abilities: Ability[];
+	base_experience: number;
 	forms: Species[];
 	game_indices: GameIndex[];
 	height: number;
@@ -20,7 +32,7 @@ export type PokemonDetail = {
 	order: number;
 	past_types: Type[];
 	species: Species;
-	sprites: Sprites;
+	sprites: FullSprites;
 	stats: Stat[];
 	types: Type[];
 	weight: number;
@@ -64,13 +76,13 @@ type VersionGroupDetail = {
 };
 
 type GenerationV = {
-	"black-white": Sprites;
+	"black-white": FullSprites;
 };
 
 type GenerationIv = {
-	"diamond-pearl": Sprites;
-	"heartgold-soulsilver": Sprites;
-	platinum: Sprites;
+	"diamond-pearl": FullSprites;
+	"heartgold-soulsilver": FullSprites;
+	platinum: FullSprites;
 };
 
 type Versions = {
@@ -94,8 +106,20 @@ export type Sprites = {
 	front_shiny: string;
 	front_shiny_female: null;
 	other?: Other;
+};
+
+type FullSprites = {
+	back_default: string;
+	back_female: null;
+	back_shiny: string;
+	back_shiny_female: null;
+	front_default: string;
+	front_female: null;
+	front_shiny: string;
+	front_shiny_female: null;
+	other?: Other;
 	versions?: Versions;
-	animated?: Sprites;
+	animated?: FullSprites;
 };
 
 type GenerationI = {

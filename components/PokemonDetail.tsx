@@ -9,8 +9,10 @@ import {
 	Table,
 	Text,
 } from "@nextui-org/react";
+import { FC, useEffect, useState } from "react";
 import { PokemonDetail, Sprites, Stat } from "../models/pokemon";
-import { FC } from "react";
+import { isFavorite, toggleFavorite } from "../integration/favorites";
+import confetti from "canvas-confetti";
 
 type PokemonStatsTableProps = {
 	stats: Stat[];
@@ -120,71 +122,116 @@ type PokemonDetailProps = {
 };
 
 const PokemonDetail: FC<PokemonDetailProps> = ({
-	pokemon: { id, name, sprites, height, stats, abilities, weight, types },
-}) => (
-	<Grid.Container gap={2}>
-		<Grid xs={4} md={3} css={{ flexDirection: "column" }}>
-			<PokemonImages sprites={sprites} name={name} />
-		</Grid>
-		<Grid xs={8} md={9} css={{ flexDirection: "column" }}>
-			<Row align="center" justify="space-between">
-				<Col css={{ marginBottom: "$8" }}>
-					<Row align="center">
-						<Text
-							h2
-							transform="capitalize"
-							css={{ marginBottom: "$0" }}
-						>
-							{name}
-						</Text>
-						<Text b css={{ color: "$accents7", marginLeft: "$5" }}>
-							#{id}
-						</Text>
-					</Row>
-					{types.map(({ type }, index) => (
-						<Badge
-							color="primary"
-							key={index}
-							variant="flat"
-							isSquared
-							size="sm"
-							css={{
-								marginRight: "$3",
-								textTransform: "capitalize",
-							}}
-						>
-							{type.name}
-						</Badge>
+	pokemon: {
+		id,
+		name,
+		sprites,
+		height,
+		stats,
+		abilities,
+		weight,
+		types,
+		base_experience,
+	},
+}) => {
+	const [favorite, setFavorite] = useState(false);
+	const onToggleFavorite = (): void => {
+		if (!favorite)
+			confetti({
+				angle: 180,
+				origin: { x: 1.5, y: 0.2 },
+				particleCount: 100,
+			});
+		setFavorite(
+			toggleFavorite({
+				id,
+				image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`,
+				name: name,
+				url: `https://pokeapi.co/api/v2/pokemon/${id}`,
+			}),
+		);
+	};
+	useEffect(() => setFavorite(isFavorite(id)), [id]);
+	return (
+		<Grid.Container gap={2}>
+			<Grid xs={4} md={3} css={{ flexDirection: "column" }}>
+				<PokemonImages sprites={sprites} name={name} />
+			</Grid>
+			<Grid xs={8} md={9} css={{ flexDirection: "column" }}>
+				<Row align="center" justify="space-between">
+					<Col css={{ marginBottom: "$8" }}>
+						<Row align="center">
+							<Text
+								h2
+								transform="capitalize"
+								css={{ marginBottom: "$0" }}
+							>
+								{name}
+							</Text>
+							<Text
+								b
+								css={{ color: "$accents7", marginLeft: "$5" }}
+							>
+								#{id}
+							</Text>
+						</Row>
+						{types.map(({ type }, index) => (
+							<Badge
+								color="primary"
+								key={index}
+								variant="flat"
+								isSquared
+								size="sm"
+								css={{
+									textTransform: "capitalize",
+								}}
+							>
+								{type.name}
+							</Badge>
+						))}
+					</Col>
+					<Button
+						size="sm"
+						color="gradient"
+						bordered={!favorite}
+						onPress={onToggleFavorite}
+					>
+						{favorite ? "Favorite" : "Save as Favorite"}
+					</Button>
+				</Row>
+				<Text span>
+					<Text b>Height: </Text>
+					{height}
+				</Text>
+				<Text span>
+					<Text b>Weight: </Text>
+					{weight}
+				</Text>
+				<Text span>
+					<Text b>XP Base: </Text>
+					{base_experience}
+				</Text>
+				<Spacer y={0.5} />
+				<Text b>Stats:</Text>
+				<PokemonStatsTable stats={stats} name={name} />
+				<Spacer y={0.5} />
+				<Text b>Abilities:</Text>
+				<Grid.Container>
+					{abilities.map((ability, index) => (
+						<Grid key={index}>
+							<Badge
+								variant="flat"
+								isSquared
+								css={{ textTransform: "capitalize" }}
+							>
+								{ability.ability.name}
+							</Badge>
+						</Grid>
 					))}
-				</Col>
-				<Button size="sm" color="gradient" bordered>
-					Save as Favorite
-				</Button>
-			</Row>
-			<Text span>
-				<Text b>Height: </Text>
-				{height}
-			</Text>
-			<Text span>
-				<Text b>Weight: </Text>
-				{weight}
-			</Text>
-			<Spacer y={0.5} />
-			<Text b>Stats:</Text>
-			<PokemonStatsTable stats={stats} name={name} />
-			<Spacer y={0.5} />
-			<Text b>Abilities:</Text>
-			<ul>
-				{abilities.map((ability, index) => (
-					<li key={index}>
-						<Text transform="capitalize">
-							{ability.ability.name}
-						</Text>
-					</li>
-				))}
-			</ul>
-		</Grid>
-	</Grid.Container>
-);
+				</Grid.Container>
+			</Grid>
+		</Grid.Container>
+	);
+};
 
 export default PokemonDetail;

@@ -18,12 +18,11 @@ const darkTheme = createTheme({
 });
 
 const App: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
-	const getLayout = Component.getLayout ?? ((page): ReactElement => page);
-	return getLayout(
+	const getLayout = Component.getLayout || ((page): ReactElement => page);
+	return (
 		<NextUIProvider theme={darkTheme}>
-			<Component {...pageProps} />
-		</NextUIProvider>,
-		pageProps,
+			{getLayout(<Component {...pageProps} />, pageProps)}
+		</NextUIProvider>
 	);
 };
 

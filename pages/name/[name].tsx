@@ -11,7 +11,7 @@ import PokemonDetailUI from "../../components/PokemonDetail";
 import { ReactElement } from "react";
 
 type PokemonDetailPaths = {
-	id: string;
+	name: string;
 };
 
 type PokemonDetailProps = {
@@ -40,14 +40,8 @@ export const getStaticPaths: GetStaticPaths<PokemonDetailPaths> = async () => {
 	return {
 		fallback: false,
 		paths: pokemonList
-			.map(({ url }) => ({
-				params: {
-					id:
-						url
-							?.split("/")
-							.filter((val) => !!val)
-							.pop() || "",
-				},
+			.map(({ name }) => ({
+				params: { name: name || "" },
 			}))
 			.filter((item) => !!item),
 	};
@@ -57,8 +51,8 @@ export const getStaticProps: GetStaticProps<
 	PokemonDetailProps,
 	PokemonDetailPaths
 > = async (ctx) => {
-	const id = Number(ctx.params?.id);
-	const pokemon = await getPokemonByIdOrName(id);
+	const name = ctx.params?.name || "";
+	const pokemon = await getPokemonByIdOrName(name);
 	return {
 		props: {
 			pokemon,
